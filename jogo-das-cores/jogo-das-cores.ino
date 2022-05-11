@@ -48,54 +48,19 @@ void loop() {
     }
     else if(endGame == false){
       if(digitalRead(BUTTON_RED) == HIGH){
-        for(int i = positionOrder; i<sizeListOrderNow;i++){
-          if(RED == listOrder[positionOrder]){
-            positionOrder++;
-            EnableLed(i);
-            break;
-          }
-          WrongSequence();
-          return;
-        }
+        if(CompareColor(RED)==false){return;}
       }
       else if(digitalRead(BUTTON_YELLOW) == HIGH){
-        for(int i = positionOrder; i<sizeListOrderNow;i++){
-          if(YELLOW == listOrder[positionOrder]){
-            positionOrder++;
-            EnableLed(i);
-            break;
-          }
-          WrongSequence();
-          return;
-        }
+        if(CompareColor(YELLOW)==false){return;}
       }
       else if(digitalRead(BUTTON_BLUE) == HIGH){
-        for(int i = positionOrder; i<sizeListOrderNow;i++){
-          if(BLUE == listOrder[positionOrder]){
-            positionOrder++;
-            EnableLed(i);
-            break;
-          }
-          WrongSequence();
-          return;
-        }
+        if(CompareColor(BLUE)==false){return;}
       }
       else if(digitalRead(BUTTON_GREEN) == HIGH){
-        for(int i = positionOrder; i<sizeListOrderNow;i++){
-          if(GREEN == listOrder[positionOrder]){
-            positionOrder++;
-            EnableLed(i);
-            break;
-          }
-          WrongSequence();
-          return;
-        }
+        if(CompareColor(GREEN)==false){return;}
       }
       if(positionOrder == sizeListOrderNow){
-        digitalWrite(PINS_LEDS[0], HIGH);
-        digitalWrite(PINS_LEDS[1], HIGH);
-        digitalWrite(PINS_LEDS[2], HIGH);
-        digitalWrite(PINS_LEDS[3], HIGH);
+        EnbleOrDisableLED(HIGH);
         NextLevel();
       }
     }
@@ -113,10 +78,7 @@ void RestartSequenceGame(){
   if(life>0){
     positionOrder = 0;
     isOrderNow = false;
-    digitalWrite(PINS_LEDS[0], LOW);
-    digitalWrite(PINS_LEDS[1], LOW);
-    digitalWrite(PINS_LEDS[2], LOW);
-    digitalWrite(PINS_LEDS[3], LOW);
+    EnbleOrDisableLED(LOW);
     delay(2000);
   }
   else{
@@ -124,7 +86,6 @@ void RestartSequenceGame(){
     delay(3000);
     ResetGame();
   }
-  
 }
 
 void NextLevel(){
@@ -189,4 +150,22 @@ void WrongSequence(){
   life--;
   PrintLifePlayer();
   RestartSequenceGame();
+}
+
+bool CompareColor(int colorLed){
+  for(int i = positionOrder; i<sizeListOrderNow;i++){
+    if(colorLed == listOrder[positionOrder]){
+      positionOrder++;
+      EnableLed(i);
+      return true;
+    }
+    WrongSequence();
+    return false;
+  }
+}
+
+void EnbleOrDisableLED(int value){
+  for(int i = 0; i<4;i++){
+    digitalWrite(PINS_LEDS[i], value);
+  }
 }
