@@ -1,8 +1,6 @@
 #include <LiquidCrystal.h>
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
-
-
 const int RED = 0;
 const int YELLOW = 1;
 const int BLUE = 2;
@@ -23,12 +21,14 @@ bool endGame = false;
 int positionOrder = 0;
 int sizeListOrderNow = 0;
 int sizeListOrder = 0;
+int life = 3;
 
 void setup() {
   lcd.begin(16, 2);
   sizeListOrder = (sizeof(listOrder) / sizeof(listOrder[0]));
   sizeListOrderNow =  1;
   PrintLevelGame();
+  PrintLifePlayer();
   for(int i = 0; i<4;i++){
     pinMode(PINS_BUTTONS[i],OUTPUT);
     pinMode(PINS_LEDS[i],OUTPUT);
@@ -56,7 +56,7 @@ void loop() {
             EnableLed(i);
             break;
           }
-          RestartSequenceGame();
+          WrongSequence();
           return;
         }
       }
@@ -67,7 +67,7 @@ void loop() {
             EnableLed(i);
             break;
           }
-          RestartSequenceGame();
+          WrongSequence();
           return;
         }
       }
@@ -78,7 +78,7 @@ void loop() {
             EnableLed(i);
             break;
           }
-          RestartSequenceGame();
+          WrongSequence();
           return;
         }
       }
@@ -89,7 +89,7 @@ void loop() {
             EnableLed(i);
             break;
           }
-          RestartSequenceGame();
+          WrongSequence();
           return;
         }
       }
@@ -112,13 +112,21 @@ void EnableLed(int indexLed){
 }
 
 void RestartSequenceGame(){
-  positionOrder = 0;
-  isOrderNow = false;
-  digitalWrite(PINS_LEDS[0], LOW);
-  digitalWrite(PINS_LEDS[1], LOW);
-  digitalWrite(PINS_LEDS[2], LOW);
-  digitalWrite(PINS_LEDS[3], LOW);
-  delay(2000);
+  if(life>0){
+    positionOrder = 0;
+    isOrderNow = false;
+    digitalWrite(PINS_LEDS[0], LOW);
+    digitalWrite(PINS_LEDS[1], LOW);
+    digitalWrite(PINS_LEDS[2], LOW);
+    digitalWrite(PINS_LEDS[3], LOW);
+    delay(2000);
+  }
+  else{
+    PrintGameOver();
+    delay(3000);
+    ResetGame();
+  }
+  
 }
 
 void NextLevel(){
@@ -137,6 +145,9 @@ void NextLevel(){
 void ResetGame(){
   endGame = false;
   sizeListOrderNow = 1;
+  life = 3;
+  lcd.clear();
+  PrintLifePlayer();
   PrintLevelGame();
   RestartSequenceGame();
 }
@@ -149,5 +160,38 @@ void PrintLevelGame(){
 
 void PrintEndGame(){
   lcd.setCursor(0,1);
-  lcd.print("Fim de jogo");
+  lcd.print("  Fim de jogo   ");
+}
+
+void PrintGameOver(){
+  lcd.setCursor(0,0);
+  lcd.print("      Game      ");
+  lcd.setCursor(0,1);
+  lcd.print("      Over      ");
+}
+
+void PrintLifePlayer(){
+  lcd.setCursor(0,1);
+  switch(life){
+    case 4:
+    case 3:
+    lcd.print("Vida : ###      ");
+    break;
+    case 2:
+    lcd.print("Vida : ##       ");
+    break;
+    case 1:
+    lcd.print("Vida : #        ");
+    break;
+    default:
+    lcd.print("Vida :          ");
+    break;
+  }
+  
+}
+
+void WrongSequence(){
+  life--;
+  PrintLifePlayer();
+  RestartSequenceGame();
 }
