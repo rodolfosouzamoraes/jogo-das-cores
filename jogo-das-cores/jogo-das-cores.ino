@@ -12,7 +12,6 @@ const int BUTTON_YELLOW = A1;
 const int BUTTON_BLUE = A2;
 const int BUTTON_GREEN = A3;
 const int BUTTON_RESET = A5;
-const int PINS_BUTTONS[] = {BUTTON_RED,BUTTON_YELLOW,BUTTON_BLUE,BUTTON_GREEN};
 
 int listOrder[] = {RED,BLUE,BLUE,GREEN,YELLOW,BLUE,RED,RED,YELLOW,GREEN};
 
@@ -30,7 +29,6 @@ void setup() {
   PrintLevelGame();
   PrintLifePlayer();
   for(int i = 0; i<4;i++){
-    pinMode(PINS_BUTTONS[i],OUTPUT);
     pinMode(PINS_LEDS[i],OUTPUT);
   }
   delay(2000);
@@ -49,9 +47,9 @@ void loop() {
       return;
     }
     else if(endGame == false){
-      if(digitalRead(PINS_BUTTONS[0]) == HIGH){
+      if(digitalRead(BUTTON_RED) == HIGH){
         for(int i = positionOrder; i<sizeListOrderNow;i++){
-          if(0 == listOrder[positionOrder]){
+          if(RED == listOrder[positionOrder]){
             positionOrder++;
             EnableLed(i);
             break;
@@ -60,9 +58,9 @@ void loop() {
           return;
         }
       }
-      else if(digitalRead(PINS_BUTTONS[1]) == HIGH){
+      else if(digitalRead(BUTTON_YELLOW) == HIGH){
         for(int i = positionOrder; i<sizeListOrderNow;i++){
-          if(1 == listOrder[positionOrder]){
+          if(YELLOW == listOrder[positionOrder]){
             positionOrder++;
             EnableLed(i);
             break;
@@ -71,9 +69,9 @@ void loop() {
           return;
         }
       }
-      else if(digitalRead(PINS_BUTTONS[2]) == HIGH){
+      else if(digitalRead(BUTTON_BLUE) == HIGH){
         for(int i = positionOrder; i<sizeListOrderNow;i++){
-          if(2 == listOrder[positionOrder]){
+          if(BLUE == listOrder[positionOrder]){
             positionOrder++;
             EnableLed(i);
             break;
@@ -82,9 +80,9 @@ void loop() {
           return;
         }
       }
-      else if(digitalRead(PINS_BUTTONS[3]) == HIGH){
+      else if(digitalRead(BUTTON_GREEN) == HIGH){
         for(int i = positionOrder; i<sizeListOrderNow;i++){
-          if(3 == listOrder[positionOrder]){
+          if(GREEN == listOrder[positionOrder]){
             positionOrder++;
             EnableLed(i);
             break;
@@ -153,7 +151,6 @@ void ResetGame(){
 }
 
 void PrintLevelGame(){
-  //lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Nivel: "+String(sizeListOrderNow));
 }
@@ -173,7 +170,6 @@ void PrintGameOver(){
 void PrintLifePlayer(){
   lcd.setCursor(0,1);
   switch(life){
-    case 4:
     case 3:
     lcd.print("Vida : ###      ");
     break;
@@ -187,7 +183,6 @@ void PrintLifePlayer(){
     lcd.print("Vida :          ");
     break;
   }
-  
 }
 
 void WrongSequence(){
