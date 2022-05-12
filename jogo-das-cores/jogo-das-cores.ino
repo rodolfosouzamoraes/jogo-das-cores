@@ -13,7 +13,7 @@ const int BUTTON_BLUE = A2;
 const int BUTTON_GREEN = A3;
 const int BUTTON_RESET = A5;
 
-int listOrder[] = {RED,BLUE,BLUE,GREEN,YELLOW,BLUE,RED,RED,YELLOW,GREEN};
+int listOrder[] = {BLUE,BLUE,RED,GREEN,YELLOW,BLUE,YELLOW,RED,YELLOW,GREEN,BLUE,RED,BLUE,BLUE,GREEN,YELLOW,YELLOW,RED,GREEN,GREEN};
 
 bool isOrderNow = false;
 bool endGame = false;
